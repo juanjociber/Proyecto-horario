@@ -12,10 +12,7 @@
     <button onclick="verificarIngreso()">Verificar Ingreso</button>
     
     <script>
-
-
-
-        const usuarios =[
+          const usuarios =[
             {
                 nombre: "Juan",
                 dni:"10625474"
@@ -30,10 +27,8 @@
             }
         ]
 
-        console.log(usuarios);
-
         function verificarIngreso() {
-            var dni = document.getElementById("dni").value;
+            let dni = document.getElementById("dni").value;
 
             if (dni.trim() === "") {
                 alert("Por favor, ingrese un DNI válido.");
@@ -41,22 +36,30 @@
             }
 
             // Verificar si el DNI existe en la lista de usuarios
-            var dniEncontrado = usuarios.some(usuario => usuario.dni === dni);
+            let dniEncontrado = usuarios.some(usuario => usuario.dni === dni);
 
             if (dniEncontrado) {
                 // Obtener la hora actual
-                var horaActual = new Date();
+                let horaActual = new Date();
+                // Obtener horas y minutos
+                let horas = horaActual.getHours();
+                let minutos = horaActual.getMinutes();
+
+                if(minutos < 10){
+                    minutos = `0 ${minutos}`;
+                }
+                let horaFormateada = horas + ":" + minutos;
                 
                 // Establecer la hora de ingreso permitida (17:00)
-                var horaIngresoPermitida = new Date();
-                horaIngresoPermitida.setHours(18, 3, 0, 0);
+                let horaIngresoPermitida = new Date();
+                horaIngresoPermitida.setHours(21,53, 0, 0);
 
                 // Calcular la hora de ingreso actual del usuario
-                var horaIngreso = new Date();
+                let horaIngreso = new Date();
                 horaIngreso.setHours(horaIngreso.getHours(), horaIngreso.getMinutes(), 0, 0);
 
                 // Calcular la diferencia en minutos entre la hora de ingreso permitida y la hora actual
-                var diferenciaMinutos = (horaActual.getTime() - horaIngresoPermitida.getTime()) / (1000 * 60);
+                let diferenciaMinutos = (horaActual.getTime() - horaIngresoPermitida.getTime()) / (1000 * 60);
 
                 // Verificar si la diferencia es menor o igual a 5 minutos y mayor o igual a 0
                 if (diferenciaMinutos <= 5 && diferenciaMinutos >= 0) {
@@ -65,7 +68,7 @@
                     // Por ahora, solo un mensaje de demostración
                     console.log("DNI ingresado:", dni);
                 } else {
-                    alert("Lo siento, el ingreso no es válido. Solo puede ingresar si son exactamente 5 minutos antes de las 17:00.");
+                    alert(`Lo siento, el ingreso no es válido. Solo puede ingresar si son exactamente 5 minutos antes de las ${horaFormateada}`);
                 }
             } else {
                 alert("El DNI ingresado no existe en la lista de usuarios.");
